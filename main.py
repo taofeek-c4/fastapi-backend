@@ -104,7 +104,6 @@ async def anpredict(file: UploadFile = File(...)):
                 "confidence": confidence
             }
         })
-
     except Exception as e:
         logger.error(f"Error during prediction: {e}", exc_info=True)
         return JSONResponse(content={"status": "error", "message": str(e)}, status_code=500)
