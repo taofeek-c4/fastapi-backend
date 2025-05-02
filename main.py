@@ -27,11 +27,11 @@ logger = logging.getLogger(__name__)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_DIR = os.path.join(BASE_DIR, "model")
-MODEL_PATH = os.path.join(MODEL_DIR, "cattle_disease_model.h5")
+MODEL_PATH = os.path.join(MODEL_DIR, "cattle_disease_model.keras")
 
 os.makedirs(MODEL_DIR, exist_ok=True)
 
-FILE_ID = "1-i0qm-Bj9UrSMnp73XgMIDDGi-Vggtl1"
+FILE_ID = "1MP19OO3roZbWEwr_2b3PHOMN_xgS6ady"
 GDRIVE_URL = f"https://drive.google.com/uc?id={FILE_ID}"
 
 if not os.path.exists(MODEL_PATH):
@@ -47,7 +47,7 @@ try:
     logger.info("Model loaded successfully.")
 except Exception as e:
     logger.error(f"Failed to load model: {e}")
-    raise RuntimeError("Model loading failed. Ensure the .h5 file exists and is valid.")
+    raise RuntimeError("Model loading failed. Ensure the .keras file exists and is valid.")
 
 CLASS_LABELS = ["Foot and Mouth Disease", "Healthy", "Lumpy Skin Disease", "Mastitis"]
 
