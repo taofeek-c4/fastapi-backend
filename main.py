@@ -4,6 +4,7 @@ import numpy as np
 import os
 import uvicorn
 import logging
+import gdown
 from PIL import Image
 import tensorflow as tf
 from tensorflow.keras.models import load_model
@@ -25,17 +26,28 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_PATH = os.path.abspath(os.path.join(BASE_DIR, "model", "cattle_disease_model.h5"))
+MODEL_DIR = os.path.join(BASE_DIR, "model")
+MODEL_PATH = os.path.join(MODEL_DIR, "cattle_disease_model.h5")
+
+os.makedirs(MODEL_DIR, exist_ok=True)
+
+FILE_ID = "1-i0qm-Bj9UrSMnp73XgMIDDGi-Vggtl1"
+GDRIVE_URL = f"https://drive.google.com/uc?id={FILE_ID}"
 
 if not os.path.exists(MODEL_PATH):
-    raise FileNotFoundError(f"Model file not found at: {MODEL_PATH}")
+    try:
+        logger.info("Model file not found locally. Downloading from Google Drive...")
+        gdown.download(GDRIVE_URL, MODEL_PATH, quiet=False)
+        logger.info("Model downloaded successfully.")
+    except Exception as e:
+        logger.error(f"Failed to download model: {e}")
+        raise RuntimeError("Model download failed.")
 try:
     model = tf.keras.models.load_model(MODEL_PATH)
     logger.info("Model loaded successfully.")
 except Exception as e:
     logger.error(f"Failed to load model: {e}")
     raise RuntimeError("Model loading failed. Ensure the .h5 file exists and is valid.")
-
 
 CLASS_LABELS = ["Foot and Mouth Disease", "Healthy", "Lumpy Skin Disease", "Mastitis"]
 
